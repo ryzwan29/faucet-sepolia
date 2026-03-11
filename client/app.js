@@ -352,8 +352,23 @@ function escapeHtml(str) {
 /* ─────────────────────────────────────────
    INIT
 ───────────────────────────────────────── */
-(function init() {
+(async function init() {
+  // Load Turnstile site key dari backend
+  try {
+    const res = await fetch(`${API_BASE}/api/config`);
+    const { turnstileSiteKey } = await res.json();
+    if (turnstileSiteKey && window.turnstile) {
+      window.turnstile.render('#turnstileWidget', {
+        sitekey:          turnstileSiteKey,
+        callback:         onTurnstileSuccess,
+        'expired-callback': onTurnstileExpired,
+        theme:            'auto',
+      });
+    }
+  } catch (err) {
+    console.error('Failed to load Turnstile config:', err);
+  }
+
   fetchStats();
-  // Refresh stats every 60s
   setInterval(fetchStats, 60_000);
 })();

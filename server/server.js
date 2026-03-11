@@ -250,8 +250,8 @@ app.get('/api/stats', async (req, res) => {
 });
 
 /* ─── Health Check ─── */
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', uptime: process.uptime() });
+app.get('/api/config', (req, res) => {
+  res.json({ turnstileSiteKey: process.env.TURNSTILE_SITE_KEY || '' });
 });
 
 /* ─── SPA fallback (serve index.html for any unknown route) ─── */
